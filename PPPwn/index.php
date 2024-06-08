@@ -455,7 +455,7 @@ print("<button name=\"remount\">Remount USB</button> &nbsp; ");
 }
 
 
-print("<button name=\"restart\">Restart PPPwn</button> &nbsp; <button name=\"reboot\">Reboot PI</button> &nbsp; <button name=\"shutdown\">Shutdown PI</button> &nbsp; <button name=\"update\">Update</button>
+print("<button name=\"restart\">Restart PPPwn</button> &nbsp; <button name=\"reboot\">Reboot PI</button> &nbsp; <button name=\"shutdown\">Shutdown PI</button> &nbsp; <button name=\"update\">Update</button> &nbsp; <button name=\"show_interfaces\">Show Interfaces</button>
 </form>
 </center>");
 
@@ -683,6 +683,11 @@ if (isset($_POST['update'])){
     startLog('upd.log');");
 }
 
+if (isset($_POST['show_interfaces'])){
+	exec('sudo bash show_interfaces.sh >> /dev/null &');
+    print("logger.style.display = \"block\";
+    startLog('interfaces.log');");
+}
 print("</script>
 </body>
 </html>");
