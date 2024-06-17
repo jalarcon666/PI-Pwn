@@ -6,7 +6,7 @@ A dns blocker is also installed and used to prevent updates.<br>
 
 The <a href=https://www.raspberrypi.com/products/raspberry-pi-4-model-b/>Raspberry Pi 4</a>, <a href=https://www.raspberrypi.com/products/raspberry-pi-400/>Raspberry Pi 400</a> and <a href=https://www.raspberrypi.com/products/raspberry-pi-5/>Raspberry Pi 5</a> can pass through a usb drive inserted into the pi to the console if the pi is plugged into the console usb port<br>
 
-There is also a webserver to control the pi, change settings and send payloads by accessing http://pppwn.local from the console or your pc if you have internet access enabled.<br> 
+There is also a webserver to control the pi, change settings, show interfaces config and send payloads by accessing http://pppwn.local from the console or your pc if you have internet access enabled.<br> 
 
 <br>
 
