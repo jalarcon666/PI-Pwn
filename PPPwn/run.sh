@@ -26,6 +26,12 @@ if [ -z $XFWAP ]; then XFWAP="1"; fi
 if [ -z $XFGD ]; then XFGD="4"; fi
 if [ -z $XFBS ]; then XFBS="0"; fi
 if [ -z $XFNWB ]; then XFNWB=false; fi
+if [ -z $OIPV ]; then OIPV=false; fi
+if [ $OIPV = true ] ; then
+XFIP="fe80::4141:4141:4141:4141"
+else
+XFIP="fe80::9f9f:41ff:9f9f:41ff"
+fi
 if [ $XFNWB = true ] ; then
 XFNW="--no-wait-padi"
 else
@@ -139,9 +145,9 @@ fi
 if [[ $LEDACT == "status" ]] ;then
    echo timer | sudo tee $PLED >/dev/null
 fi
-if [[ ! $(ethtool $INTERFACE) == *"Link detected: yes"* ]]; then
+if [[ ! $(ifconfig $INTERFACE) == *"RUNNING"* ]]; then
    echo -e "\033[31mWaiting for link\033[0m" | sudo tee /dev/tty1
-   while [[ ! $(ethtool $INTERFACE) == *"Link detected: yes"* ]]
+   while [[ ! $(ifconfig $INTERFACE) == *"RUNNING"* ]]
    do
       coproc read -t 2 && wait "$!" || true
    done
@@ -263,7 +269,7 @@ do
 	fi
  	exit 1
  fi
-done < <(timeout $TIMEOUT sudo /boot/firmware/PPPwn/$CPPBIN --interface "$INTERFACE" --fw "${FIRMWAREVERSION//.}" --wait-after-pin $XFWAP --groom-delay $XFGD --buffer-size $XFBS $XFNW)
+done < <(timeout $TIMEOUT sudo /boot/firmware/PPPwn/$CPPBIN --interface "$INTERFACE" --fw "${FIRMWAREVERSION//.}" --ipv "$XFIP" --wait-after-pin $XFWAP --groom-delay $XFGD --buffer-size $XFBS $XFNW)
 if [[ $LEDACT == "status" ]] ;then
  	echo none | sudo tee $ALED >/dev/null
  	echo default-on | sudo tee $PLED >/dev/null

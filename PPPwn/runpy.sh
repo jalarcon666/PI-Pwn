@@ -14,6 +14,12 @@ if [ -z $PPDBG ]; then PPDBG=false; fi
 if [ -z $TIMEOUT ]; then TIMEOUT="5m"; fi
 if [ -z $RESTMODE ]; then RESTMODE=false; fi
 if [ -z $LEDACT ]; then LEDACT="normal"; fi
+if [ -z $OIPV ]; then OIPV=false; fi
+if [ $OIPV = true ] ; then
+PYIP="fe80::4141:4141:4141:4141"
+else
+PYIP="fe80::9f9f:41ff:9f9f:41ff"
+fi
 PITYP=$(tr -d '\0' </proc/device-tree/model) 
 if [[ $PITYP == *"Raspberry Pi 2"* ]] ;then
 coproc read -t 15 && wait "$!" || true
@@ -106,9 +112,9 @@ fi
 if [[ $LEDACT == "status" ]] ;then
    echo timer | sudo tee $PLED >/dev/null
 fi
-if [[ ! $(ethtool $INTERFACE) == *"Link detected: yes"* ]]; then
+if [[ ! $(ifconfig $INTERFACE) == *"RUNNING"* ]]; then
    echo -e "\033[31mWaiting for link\033[0m" | sudo tee /dev/tty1
-   while [[ ! $(ethtool $INTERFACE) == *"Link detected: yes"* ]]
+   while [[ ! $(ifconfig $INTERFACE) == *"RUNNING"* ]]
    do
       coproc read -t 2 && wait "$!" || true
    done
@@ -231,7 +237,7 @@ do
 	fi
  	exit 1
  fi
-done < <(timeout $TIMEOUT sudo python3 /boot/firmware/PPPwn/pppwn.py --interface=$INTERFACE --fw=${FIRMWAREVERSION//.})
+done < <(timeout $TIMEOUT sudo python3 /boot/firmware/PPPwn/pppwn.py --interface=$INTERFACE --fw=${FIRMWAREVERSION//.} --ipv=$PYIP)
 if [[ $LEDACT == "status" ]] ;then
  	echo none | sudo tee $ALED >/dev/null
  	echo default-on | sudo tee $PLED >/dev/null
